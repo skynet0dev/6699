@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>66 Screams 99 — плейлист</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Metal+Mania&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0a0c; --panel:#121215; --panel2:#1a1a1f; --line:#2a2a31;
+    --red:#d92b2b; --red2:#ff4d4d; --ember:#ff7a1a; --bone:#d7d7dd; --ash:#7d7d8a;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; min-height:100vh; background:var(--bg); color:var(--bone);
+    font-family:"Oswald",Arial,sans-serif;
+    background-image:
+      radial-gradient(1200px 500px at 80% -10%, rgba(217,43,43,.12), transparent 60%),
+      radial-gradient(900px 400px at -10% 110%, rgba(255,122,26,.08), transparent 60%),
+      repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.015) 3px 4px);
+  }
+  body::after {
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:radial-gradient(80% 60% at 50% 40%, transparent 40%, rgba(0,0,0,.5));
+  }
+  .wrap { position:relative; z-index:1; max-width:860px; margin:0 auto; padding:30px 18px 120px; }
+
+  .logo { text-align:center; padding:14px 0 4px; }
+  .logo h1 {
+    margin:0; font-family:"Metal Mania",cursive; font-size:clamp(40px,9vw,72px); font-weight:400;
+    letter-spacing:3px; color:var(--red); line-height:.95;
+    text-shadow:0 0 24px rgba(217,43,43,.5), 3px 3px 0 #000, -2px -2px 0 #000;
+    transform:skewX(-8deg);
+  }
+  .logo .sub { font-size:12px; letter-spacing:8px; color:var(--ash); text-transform:uppercase; margin-top:6px; }
+
+  .hero {
+    display:flex; gap:26px; align-items:flex-end; margin-top:28px; flex-wrap:wrap;
+    background:linear-gradient(120deg,#15151a,#1b1b21 40%,#131318);
+    border:1px solid var(--line); border-left:4px solid var(--red);
+    padding:24px; border-radius:6px; box-shadow:0 18px 50px rgba(0,0,0,.55);
+  }
+  .cover {
+    width:190px; height:190px; flex:none; border-radius:4px; position:relative; overflow:hidden;
+    background:linear-gradient(135deg,#1a1a1f,#0c0c0f), var(--cover-img, none);
+    background-size:cover; background-position:center;
+    box-shadow:0 0 0 3px #000, 0 0 0 4px var(--line), 0 16px 34px rgba(0,0,0,.6);
+  }
+  .cover .grain { width:100%; height:100%; opacity:.5; background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='4'><rect width='4' height='4' fill='%23000' opacity='.35'/></svg>") repeat; }
+  .cover img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .cover .noimg {
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:"Metal Mania",cursive; font-size:64px; color:var(--red); text-shadow:0 0 20px rgba(217,43,43,.6);
+  }
+  .meta { flex:1; min-width:240px; }
+  .meta .tag {
+    display:inline-block; font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--ember);
+    border:1px solid rgba(255,122,26,.4); padding:3px 8px; border-radius:2px; margin-bottom:12px;
+  }
+  .meta h2 { margin:0 0 4px; font-size:clamp(22px,4vw,34px); font-weight:700; letter-spacing:1px; text-transform:uppercase; }
+  .meta .band { color:var(--ash); font-size:14px; letter-spacing:2px; text-transform:uppercase; margin-bottom:14px; }
+  .meta .stats { font-size:13px; color:var(--ash); letter-spacing:1px; }
+  .meta .stats b { color:var(--red2); }
+
+  .list { margin-top:22px; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:var(--panel); }
+  .listhead {
+    display:flex; justify-content:space-between; padding:10px 18px; font-size:11px; letter-spacing:3px;
+    color:var(--ash); text-transform:uppercase; background:var(--panel2); border-bottom:1px solid var(--line);
+  }
+  .item {
+    display:flex; align-items:center; gap:14px; padding:12px 18px; cursor:pointer;
+    border-bottom:1px solid var(--line); transition:background .15s;
+  }
+  .item:last-child { border-bottom:none; }
+  .item:hover { background:var(--panel2); }
+  .item.active { background:linear-gradient(90deg, rgba(217,43,43,.18), transparent 70%); box-shadow:inset 3px 0 0 var(--red); }
+  .idx { width:28px; text-align:center; font-size:13px; color:var(--ash); font-weight:700; flex:none; }
+  .item.active .idx { color:var(--red2); }
+  .num { color:var(--ember); }
+  .info { flex:1; min-width:0; }
+  .info .t { font-size:16px; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .info .a { font-size:12px; color:var(--ash); letter-spacing:1px; text-transform:uppercase; }
+  .dur { color:var(--ash); font-size:13px; flex:none; font-variant-numeric:tabular-nums; }
+  .err { color:#c05757; font-size:11px; }
+
+  .player {
+    position:fixed; left:0; right:0; bottom:0; z-index:2;
+    background:rgba(12,12,15,.94); border-top:2px solid var(--red); backdrop-filter:blur(8px);
+    box-shadow:0 -12px 40px rgba(0,0,0,.6);
+  }
+  .prow { max-width:860px; margin:0 auto; padding:12px 18px; display:flex; align-items:center; gap:16px; }
+  #playbtn {
+    flex:none; width:58px; height:58px; border-radius:6px; border:2px solid var(--red); cursor:pointer;
+    background:var(--red); color:#fff; font-size:22px; display:flex; align-items:center; justify-content:center;
+    transition:background .15s, box-shadow .15s;
+  }
+  #playbtn:hover { background:var(--red2); box-shadow:0 0 24px rgba(217,43,43,.55); }
+  .now { flex:1; min-width:0; }
+  .now .t { font-size:16px; letter-spacing:1px; text-transform:uppercase; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .now .a { font-size:12px; color:var(--ash); letter-spacing:1px; text-transform:uppercase; }
+  .bar { flex:none; width:min(220px,28vw); display:flex; flex-direction:column; gap:4px; }
+  .bar input { width:100%; appearance:none; height:4px; background:var(--line); border-radius:2px; outline:none; }
+  .bar input::-webkit-slider-thumb { appearance:none; width:5px; height:16px; background:var(--red2); border-radius:1px; cursor:pointer; }
+  .bar input::-moz-range-thumb { width:5px; height:16px; background:var(--red2); border:none; border-radius:1px; cursor:pointer; }
+  .time { font-size:12px; color:var(--ash); font-variant-numeric:tabular-nums; flex:none; letter-spacing:1px; }
+  #nextbtn { flex:none; width:42px; height:42px; border-radius:6px; border:1px solid var(--line); background:var(--panel2); color:var(--bone); cursor:pointer; font-size:15px; }
+  #nextbtn:hover { border-color:var(--red); color:var(--red2); }
+
+  .foot { margin-top:22px; text-align:center; font-size:11px; letter-spacing:2px; color:var(--ash); text-transform:uppercase; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="logo">
+    <h1>66 Screams 99</h1>
+    <div class="sub">Metal</div>
+  </header>
+
+  <section class="hero">
+    <div class="cover" id="cover">
+      <img id="cover-img" hidden>
+      <div class="noimg" id="cover-noimg">☠</div>
+      <div class="grain"></div>
+    </div>
+    <div class="meta">
+      <div class="tag">Альбом</div>
+      <h2 id="album-title">Исход</h2>
+      <div class="band" id="album-band">66 Screams 99</div>
+      <div class="stats" id="stats">— треков · 0:00</div>
+    </div>
+  </section>
+
+  <section class="list">
+    <div class="listhead"><span>Tracklist</span><span id="total-time"></span></div>
+    <div id="list"></div>
+  </section>
+
+  <div class="foot">GitHub Pages · tracks in /tracks</div>
+</div>
+
+<footer class="player">
+  <div class="prow">
+    <button id="playbtn">▶</button>
+    <div class="now">
+      <div class="t" id="now-title">Nothin' plays</div>
+      <div class="a" id="now-artist">Press play</div>
+    </div>
+    <div class="bar">
+      <input type="range" id="seek" min="0" max="1000" value="0">
+      <div class="time" id="time">0:00 / 0:00</div>
+    </div>
+    <button id="nextbtn" title="Next">❯❯</button>
+  </div>
+</footer>
+
+<script>
+const AUDIO = new Audio();
+let tracks = [];
+let current = -1;
+let playing = false;
+const $ = id => document.getElementById(id);
+
+function trackCover(i) {
+  return "conic-gradient(from " + (i*37 % 360) + "deg, #2b2b33, #680e0e, #1a1a1f)";
+}
+
+
+const TRACKS = [
+  { file: "tracks/track12.mp3", title: "Screams",          band: "66 Screams 99" },
+  { file: "tracks/track08.mp3", title: "Путь к истине",    band: "66 Screams 99" },
+  { file: "tracks/track04.mp3", title: "Путь и грех",      band: "66 Screams 99" },
+  { file: "tracks/track05.mp3", title: "Мои руки связаны", band: "66 Screams 99" },
+  { file: "tracks/track01.mp3", title: "Сектанты",         band: "66 Screams 99" },
+  { file: "tracks/track02.mp3", title: "Хакеры",           band: "66 Screams 99" },
+  { file: "tracks/track11.mp3", title: "Шепчет время",     band: "66 Screams 99" },
+  { file: "tracks/track03.mp3", title: "Неординарность",   band: "66 Screams 99" },
+  { file: "tracks/track06.mp3", title: "Моя душа",         band: "66 Screams 99" },
+  { file: "tracks/track07.mp3", title: "Мы так хотели",    band: "66 Screams 99" },
+  { file: "tracks/track09.mp3", title: "Слепая и немая",   band: "66 Screams 99" },
+  { file: "tracks/track10.mp3", title: "Ты демон",         band: "66 Screams 99" },
+
+];
+
+$("album-title").textContent = "Исход";
+$("album-band").textContent = "66 SCREAMS 99";
+
+init();
+async function init() {
+
+  try {
+    const img = $("cover-img");
+    img.src = "cover/cover.jpg";
+    await img.decode();
+    img.hidden = false;
+    $("cover-noimg").style.display = "none";
+  } catch(e) {  }
+
+  for (let i=0; i<TRACKS.length; i++) {
+    const t = TRACKS[i];
+    let dur = await probe(t.file);
+    tracks.push({ url: t.file, title: t.title, band: t.band, dur, cov: trackCover(i) });
+  }
+  render();
+}
+
+function probe(url) {
+  return new Promise(resolve => {
+    const a = document.createElement("audio");
+    let done = false;
+    a.addEventListener("loadedmetadata", () => { if(!done){done=true; resolve(a.duration||0);} });
+    a.addEventListener("error", () => { if(!done){done=true; resolve(0);} });
+    a.src = url;
+    if (a.readyState >= 1) { done=true; resolve(a.duration||0); }
+  });
+}
+
+function render() {
+  const list = $("list");
+  list.innerHTML = "";
+  let total = 0;
+  tracks.forEach((t,i)=>{
+    total += t.dur||0;
+    const row = document.createElement("div");
+    row.className = "item" + (i===current? " active":"");
+    row.innerHTML =
+      '<div class="idx">' + (i===current&&playing? '<span class="num">▶</span>' : i+1) + '</div>' +
+      '<div class="info"><div class="t">'+t.title+'</div>' +
+      '<div class="a">'+t.band+(t.dur? '' : ' <span class="err">[не найдено]</span>')+'</div></div>' +
+      '<div class="dur">'+fmt(t.dur)+'</div>';
+    row.onclick = () => playTrack(i);
+    list.appendChild(row);
+  });
+  $("stats").textContent = tracks.length + " треков · " + fmt(total);
+  $("total-time").textContent = fmt(total);
+}
+
+function fmt(s) {
+  if (!isFinite(s) || !s) return "--:--";
+  s = Math.floor(s);
+  const m = Math.floor(s/60);
+  return m + ":" + String(s%60).padStart(2,"0");
+}
+
+AUDIO.addEventListener("timeupdate", () => {
+  if (AUDIO.duration) $("seek").value = (AUDIO.currentTime/AUDIO.duration)*1000;
+  $("time").textContent = fmt(AUDIO.currentTime) + " / " + fmt(AUDIO.duration);
+});
+AUDIO.addEventListener("ended", () => next());
+$("seek").addEventListener("input", e => {
+  if (AUDIO.duration) AUDIO.currentTime = (e.target.value/1000) * AUDIO.duration;
+});
+
+function playTrack(i) {
+  current = i; const t = tracks[i];
+  AUDIO.src = t.url;
+  AUDIO.play().then(()=>{
+    playing = true; paint();
+    $("now-title").textContent = t.title;
+    $("now-artist").textContent = t.band;
+  }).catch(()=>{
+    $("now-title").textContent = t.title;
+    $("now-artist").textContent = "не удалось воспроизвести";
+  });
+  paint(); render();
+}
+function paint() {
+  $("playbtn").textContent = playing ? "❚❚" : "▶";
+  render();
+}
+function toggle() {
+  if (!tracks.length) return;
+  if (current < 0) { playTrack(0); return; }
+  if (AUDIO.paused) { AUDIO.play(); playing=true; }
+  else { AUDIO.pause(); playing=false; }
+  paint(); $("now-title").textContent = tracks[current].title;
+  $("now-artist").textContent = tracks[current].band;
+}
+function next() { if (tracks.length) playTrack((current+1)%tracks.length); }
+$("playbtn").onclick = toggle;
+$("nextbtn").onclick = next;
+</script>
+</body>
+</html>
